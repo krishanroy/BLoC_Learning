@@ -1,16 +1,4 @@
-# bloc_learning
+## bloc_learning 
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A project for learning basic Flutter BLoC Architecture pattern from the following Online Resources:
+- [Flutter BLoC Tutorial -Ripples Code](https://youtu.be/opj36I9iXiw?si=8N5GEBIXj_RRJdyo) check in `dev_krishan_bloc_tutorial_ripples_code_counter_app` branch
