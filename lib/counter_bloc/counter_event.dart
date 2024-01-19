@@ -1,4 +1,4 @@
-abstract class CounterEvent {}
+sealed class CounterEvent {}
 
 class CounterIncrementEvent extends CounterEvent {}
 

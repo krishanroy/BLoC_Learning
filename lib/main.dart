@@ -1,9 +1,10 @@
+import 'package:bloc_learning/color_bloc/color_bloc.dart';
+import 'package:bloc_learning/color_bloc/color_state.dart';
 import 'package:bloc_learning/counter_bloc/counter_bloc.dart';
 import 'package:bloc_learning/counter_bloc/counter_event.dart';
 import 'package:bloc_learning/counter_bloc/counter_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,8 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterBloc>(
-      create: (context) => CounterBloc(),
+    /**
+     * When we need to track more than one state for a single event, we can use
+     * MultiBlocProvider (MBP). We can use nested Bloc but for readability, MBP is better
+     */
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CounterBloc>(create: (context) => CounterBloc()),
+        BlocProvider<ColorBloc>(create: (context) => ColorBloc())
+      ],
       child: MaterialApp(
         title: 'Counter BLoC',
         theme: ThemeData(
@@ -25,6 +33,17 @@ class MyApp extends StatelessWidget {
         home: const MyHomePage(title: 'Counter BLoC Home Page'),
       ),
     );
+    /*return BlocProvider<CounterBloc>(
+      create: (context) => CounterBloc(),
+      child: MaterialApp(
+        title: 'Counter BLoC',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(title: 'Counter BLoC Home Page'),
+      ),
+    );*/
   }
 }
 
@@ -98,7 +117,7 @@ class MyHomePage extends StatelessWidget {
             /**
              * Bloc Consumer Redraws as well as performs some action
              */
-
+            /*
             BlocConsumer<CounterBloc, CounterState>(
               builder: (context, state) {
                 return Text(
@@ -128,6 +147,41 @@ class MyHomePage extends StatelessWidget {
                 }
               },
             ),
+             */
+            /**
+             * BlocSelector can perform filtering operation
+             */
+            /*
+            BlocSelector<CounterBloc, CounterState, bool>(
+              selector: (state) => state.counter > 3 ? true : false,
+              builder: (BuildContext context, state) {
+                return Center(
+                  child: Container(
+                    height: 200,
+                    width: 200,
+                    color: state ? Colors.green : Colors.amber,
+                  ),
+                );
+              },
+            ),
+             */
+            BlocBuilder<ColorBloc, ColorState>(
+              builder: (context, state) {
+                return Container(
+                  color: state.color,
+                  width: 200,
+                  height: 200,
+                );
+              },
+            ),
+            BlocBuilder<CounterBloc, CounterState>(
+              builder: (context, state) {
+                return Text(
+                  '${state.counter}',
+                  style: const TextStyle(fontSize: 50),
+                );
+              },
+            ),
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -135,6 +189,7 @@ class MyHomePage extends StatelessWidget {
                 FloatingActionButton(
                   onPressed: () {
                     context.read<CounterBloc>().add(CounterDecrementEvent());
+                    context.read<ColorBloc>().add(CounterDecrementEvent());
                   },
                   tooltip: 'Decrement',
                   child: const Icon(Icons.remove),
@@ -142,6 +197,7 @@ class MyHomePage extends StatelessWidget {
                 FloatingActionButton(
                   onPressed: () {
                     context.read<CounterBloc>().add(CounterIncrementEvent());
+                    context.read<ColorBloc>().add(CounterIncrementEvent());
                   },
                   tooltip: 'Increment',
                   child: const Icon(Icons.add),
