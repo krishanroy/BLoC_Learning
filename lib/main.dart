@@ -3,6 +3,7 @@ import 'package:bloc_learning/counter_bloc/counter_event.dart';
 import 'package:bloc_learning/counter_bloc/counter_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,13 +48,41 @@ class MyHomePage extends StatelessWidget {
               'You have pushed the button this many times:',
             ),
             const SizedBox(height: 30),
-            BlocBuilder<CounterBloc, CounterState>(
-              builder: (context, state) {
-                return Text(
-                  '${state.counter}',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                );
+            // BlocBuilder<CounterBloc, CounterState>(
+            //   // buildWhen: (previous, current) {
+            //   //   return current.counter >= 0;
+            //   // },
+            //   builder: (context, state) {
+            //     return Text(
+            //       '${state.counter}',
+            //       style: Theme.of(context).textTheme.headlineMedium,
+            //     );
+            //   },
+            // ),
+
+            BlocListener<CounterBloc, CounterState>(listener: (context, state) {
+                if (state.counter >= 5) {
+                  final snackBar = SnackBar(
+                    /// need to set following properties for best effect of awesome_snackbar_content
+                    elevation: 0,
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.transparent,
+                    content: AwesomeSnackbarContent(
+                      title: 'Working!',
+                      message:
+                      'snackbar is displayed!',
+
+                      /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                      contentType: ContentType.success,
+                    ),
+                  );
+
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(snackBar);
+                }
               },
+              child: const Text('Bloc Listener'),
             ),
             const SizedBox(height: 50),
             Row(
